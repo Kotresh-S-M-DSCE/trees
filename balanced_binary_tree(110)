@@ -1,0 +1,53 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public String check(TreeNode root)
+    {
+        if(root==null)
+            return "t";
+        String str1=check(root.left);
+        int i=1,depth1=0,depth2=0;
+        if(str1.charAt(0)=='f')
+            return "f";
+        while(i<str1.length())
+            depth1=depth1*10+str1.charAt(i++)-'0';
+        String str2=check(root.right);
+        if(str2.charAt(0)=='f')
+            return "f";
+        i=1;
+        while(i<str2.length())
+            depth2=depth2*10+str2.charAt(i++)-'0';
+        if(Math.abs(depth1-depth2)>1)
+            return "f";
+        int num=Math.max(depth1,depth2);
+        num++;
+        StringBuilder sb=new StringBuilder();
+        while(num>0)
+        {
+            sb.append(num%10);
+            num/=10;
+        }
+        sb.append('t');
+        return sb.reverse().toString();
+    }
+    public boolean isBalanced(TreeNode root) {
+        if(root==null)
+           return true;
+        if(check(root).charAt(0)=='f')
+           return false;
+        return true;
+    }
+}
