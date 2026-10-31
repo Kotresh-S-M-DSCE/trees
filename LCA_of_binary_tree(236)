@@ -1,3 +1,102 @@
+// /**
+//  * Definition for a binary tree node.
+//  * public class TreeNode {
+//  *     int val;
+//  *     TreeNode left;
+//  *     TreeNode right;
+//  *     TreeNode(int x) { val = x; }
+//  * }
+//  */
+// USING HASHSET
+// class Solution {
+//     TreeNode p_next=null,q_next=null,ret=null;
+//     int p_found=0,q_found=0;
+//     HashSet<TreeNode> set=new HashSet<>();
+//     public boolean dfs(TreeNode root,TreeNode p,TreeNode q)
+//     {
+//         if(root==null)
+//             return false;
+//         boolean bool=dfs(root.left,p,q);
+//         if(bool)
+//             return true;
+//         if((root.left==p_next&&p_found==1)||(root.left==q_next&&q_found==1))
+//         {
+//             if(root.left==p_next)
+//             {
+//                 p_next=root;
+//                 if(set.contains(root))
+//                 {
+//                     ret=root;
+//                     return true;
+//                 }
+//                 set.add(root);
+//             }
+//             else
+//             {
+//                 q_next=root;
+//                 if(set.contains(root))
+//                 {
+//                     ret=root;
+//                     return true;
+//                 }
+//                 set.add(root);
+//             }
+//         }
+//         bool=dfs(root.right,p,q);
+//         if(bool)
+//             return true;
+//         if((root.right==p_next&&p_found==1)||(root.right==q_next&&q_found==1))
+//         {
+//             if(root.right==p_next)
+//             {
+//                 p_next=root;
+//                 if(set.contains(root))
+//                 {
+//                     ret=root;
+//                     return true;
+//                 }
+//                 set.add(root);
+//             }
+//             else
+//             {
+//                 q_next=root;
+//                 if(set.contains(root))
+//                 {
+//                     ret=root;
+//                     return true;
+//                 }
+//                 set.add(root);
+//             }
+//         }
+//         if(p==root)
+//         {
+//             p_found=1;
+//             p_next=p;
+//             if(set.contains(root))
+//             {
+//                 ret=root;
+//                 return true;
+//             }
+//             set.add(root);
+//         }
+//         if(q==root)
+//         {
+//             q_found=1;
+//             q_next=q;
+//             if(set.contains(root))
+//             {
+//                 ret=root;
+//                 return true;
+//             }
+//             set.add(root);
+//         }
+//         return false;
+//     }
+//     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+//         dfs(root,p,q);
+//         return ret;
+//     }
+// }
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -7,10 +106,10 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
+// without using hashset
 class Solution {
     TreeNode p_next=null,q_next=null,ret=null;
     int p_found=0,q_found=0;
-    HashSet<TreeNode> set=new HashSet<>();
     public boolean dfs(TreeNode root,TreeNode p,TreeNode q)
     {
         if(root==null)
@@ -21,73 +120,44 @@ class Solution {
         if((root.left==p_next&&p_found==1)||(root.left==q_next&&q_found==1))
         {
             if(root.left==p_next)
-            {
                 p_next=root;
-                if(set.contains(root))
-                {
-                    ret=root;
-                    return true;
-                }
-                set.add(root);
-            }
             else
-            {
                 q_next=root;
-                if(set.contains(root))
-                {
-                    ret=root;
-                    return true;
-                }
-                set.add(root);
-            }
         }
         bool=dfs(root.right,p,q);
         if(bool)
             return true;
         if((root.right==p_next&&p_found==1)||(root.right==q_next&&q_found==1))
         {
+            if(p_next==root||q_next==root)
+            {
+                ret=root;
+                return true;
+            }
             if(root.right==p_next)
-            {
                 p_next=root;
-                if(set.contains(root))
-                {
-                    ret=root;
-                    return true;
-                }
-                set.add(root);
-            }
             else
-            {
                 q_next=root;
-                if(set.contains(root))
-                {
-                    ret=root;
-                    return true;
-                }
-                set.add(root);
-            }
         }
         if(p==root)
         {
-            p_found=1;
-            p_next=p;
-            if(set.contains(root))
+            if(q_next==p)
             {
                 ret=root;
                 return true;
             }
-            set.add(root);
+            p_found=1;
+            p_next=p;
         }
         if(q==root)
         {
-            q_found=1;
-            q_next=q;
-            if(set.contains(root))
+            if(p_next==q)
             {
                 ret=root;
                 return true;
             }
-            set.add(root);
+            q_found=1;
+            q_next=q;
         }
         return false;
     }
