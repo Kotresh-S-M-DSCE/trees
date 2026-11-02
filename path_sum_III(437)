@@ -1,0 +1,42 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    int ret=0;
+    public void dfs(TreeNode root,int sum,long cur,Map<Long,Integer> map)
+    {
+        if(root==null)
+            return;
+        Map<Long,Integer> temp=new HashMap<>(map);
+        cur+=root.val;
+        if(temp.containsKey(cur-sum))
+            ret+=temp.get(cur-sum);
+        if(temp.containsKey(cur))
+        {
+            int inc=temp.get(cur);
+            temp.put(cur,inc+1);
+        }
+        else
+            temp.put(cur,1);
+        dfs(root.left,sum,cur,temp);
+        dfs(root.right,sum,cur,temp);
+    }
+    public int pathSum(TreeNode root, int sum) {
+        Map<Long,Integer> map=new HashMap<>();
+        map.put((long)0,1);
+        dfs(root,sum,0,map);
+        return ret;
+    }
+}
