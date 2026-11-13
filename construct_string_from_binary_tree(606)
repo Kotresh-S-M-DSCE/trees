@@ -1,0 +1,80 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public StringBuilder convert(int value)
+    {
+        StringBuilder sb=new StringBuilder();
+        if(value==0)
+        {
+            sb.append('0');
+            return sb;
+        }
+        int flag=0;
+        if(value<0)
+        {
+            flag=1;
+            value=-value;
+        }
+        while(value>0)
+        {
+            sb.append(value%10);
+            value/=10;
+        }
+        if(flag==1)
+            sb.append('-');
+        return sb.reverse();
+    }
+    public StringBuilder dfs(TreeNode root)
+    {
+        StringBuilder sb=new StringBuilder();
+        int value=root.val;
+        if(root.left!=null||root.right!=null)
+        {
+            if(root.left!=null&&root.right!=null)
+            {
+                sb.append(convert(value));
+                sb.append('(');
+                sb.append(dfs(root.left));
+                sb.append(')');
+                sb.append('(');
+                sb.append(dfs(root.right));
+                sb.append(')');
+            }
+            else if(root.left!=null)
+            {
+                sb.append(convert(value));
+                sb.append('(');
+                sb.append(dfs(root.left));
+                sb.append(')');
+            }
+            else
+            {
+                sb.append(convert(value));
+                sb.append('(');
+                sb.append(')');
+                sb.append('(');
+                sb.append(dfs(root.right));
+                sb.append(')');
+            }
+        }
+        else
+            sb.append(convert(value));
+        return sb;
+    }
+    public String tree2str(TreeNode root) {
+        return dfs(root).toString();
+    }
+}
