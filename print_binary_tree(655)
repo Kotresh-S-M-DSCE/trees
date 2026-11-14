@@ -1,0 +1,120 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int dfs(TreeNode root)
+    {
+        if(root==null)
+            return 0;
+        int lft=dfs(root.left);
+        int rgt=dfs(root.right);
+        return Math.max(lft,rgt)+1;
+    }
+    public String convert(int temp)
+    {
+        if(temp==0)
+            return "0";
+        StringBuilder sb=new StringBuilder();
+        int flag=0;
+        if(temp<0)
+        {
+            flag=1;
+            temp=-temp;
+        }
+        while(temp>0)
+        {
+            sb.append(temp%10);
+            temp/=10;
+        }
+        if(flag==1)
+            sb.append('-');
+        return sb.reverse().toString();
+    }
+    public List<List<String>> printTree(TreeNode root) {
+        int depth=dfs(root);
+        List<TreeNode> list=new ArrayList<>();
+        list.add(root);
+        int count=1,i=0;
+        while(count<depth)
+        {
+            int temp=list.size()-1;
+            count++;
+            while(i<=temp)
+            {
+                TreeNode node=list.get(i++);
+                if(node.val==100)
+                {
+                    list.add(node);
+                    list.add(node);
+                }
+                else
+                {
+                    if(node.left!=null)
+                        list.add(node.left);
+                    else
+                        list.add(new TreeNode(100));
+                    if(node.right!=null)
+                        list.add(node.right);
+                    else
+                        list.add(new TreeNode(100));
+                }
+            }
+        }
+        int till=(int)Math.pow(2,depth-1)-1;
+        int last=till*2+1,ind=0;
+        List<List<String>> ret=new ArrayList<>();
+ //"0""0""0""0""0""0""0""1""0""0""0""0""0""0""0"
+ //"0""0""0""2""0""0""0""0""0""0""0""3""0""0""0"
+ //"0""4""0""0""0""5""0""0""0""6""0""0""0""7""0"
+ //"8""0""9""0""1""0""1""0""2""0""3""0""4""0""5"
+        for(i=0;i<depth;i++)
+        {
+            int j=0;
+            List<String> list1=new ArrayList<>();
+            while(j<last)
+            {
+                int k=0;
+                while(k<till)
+                {
+                    list1.add("");
+                    k++;
+                }
+                j+=till;
+                if(list.get(ind).val!=100)
+                {
+                    String str=convert(list.get(ind).val);
+                    list1.add(str);
+                }
+                else
+                    list1.add("");
+                ind++;
+                j++;
+                k=0;
+                while(k<till)
+                {
+                    list1.add("");
+                    k++;
+                }
+                j+=till;
+                list1.add("");
+                j++;
+            }
+            list1.remove(list1.size()-1);
+            ret.add(list1);
+            till/=2;
+        }
+        return ret;
+    }
+}
