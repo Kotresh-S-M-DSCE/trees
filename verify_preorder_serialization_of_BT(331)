@@ -1,0 +1,20 @@
+class Solution {
+    public int dfs(String str,int i)
+    {
+        if(i>=str.length())
+            return 100001;
+        if(str.charAt(i)=='#')
+            return i+2;
+        while(i<str.length()&&str.charAt(i)!=',')
+            i++;
+        if(i==str.length())
+            return 100001;
+        i=dfs(str,i+1);
+        return dfs(str,i);
+    }
+    public boolean isValidSerialization(String str) {
+        if(dfs(str,0)==str.length()+1)
+            return true;
+        return false;
+    }
+}
